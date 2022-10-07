@@ -2,6 +2,28 @@
 
 {% block content %}
 
-<h1>THIS IS A TEST</h1>
+<h3>Current Score: <b class="score">0</b></h3>
+
+<table class="board">
+    <tbody>
+        {% for row in board %}
+        <tr>
+            {% for cell in row %}
+            <td>{{ cell }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- <p class="msg"></p> -->
+<div id="msgdiv"></div>
+
+<section id="">
+    <form class="wordcheck" method="POST">
+        <input name="word" class="word" id="word" placeholder="<word_to_check>" required autofocus>
+        <button id="checkwordbtn">Check Word</button>
+    </form>
+</section>
 
 {% endblock %}
