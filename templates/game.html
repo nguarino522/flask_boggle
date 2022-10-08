@@ -2,27 +2,57 @@
 
 {% block content %}
 
-<h3>Current Score: <b class="score">0</b></h3>
+<h3>Current Score: <b class="score">0</b>
+    / High Score: <b id="highscore">{{ highscore }}</b>
+</h3>
+<h3>Number of games played: <b>{{ numplays }}</b>
+    / Timer: <b class="timer">60</b> seconds left.</h3>
 
-<table class="board">
-    <tbody>
-        {% for row in board %}
-        <tr>
-            {% for cell in row %}
-            <td>{{ cell }}</td>
+<div class="gamecontrols">
+    <button id="beginbtn">Begin Game</button>
+    <a href="/game"><button id="restartbtn">Start New Game</button></a>
+</div>
+
+<section>
+    <table class="board" id="mainboard" hidden>
+        <tbody>
+            {% for row in board %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+    <table class="board" id="tempboard">
+        <tbody>
+            {% for row in board %}
+            <tr>
+                {% for cell in row %}
+                <td>X</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<!-- <p class="msg"></p> -->
+    <div class="wordlist">
+        <p id="listtitle">Words found:</p>
+        <ol class="usedwords">         
+        </ol>
+    </div>
+
+</section>
+
+
+
 <div id="msgdiv"></div>
 
-<section id="">
+<section>
     <form class="wordcheck" method="POST">
-        <input name="word" class="word" id="word" placeholder="<word_to_check>" required autofocus>
-        <button id="checkwordbtn">Check Word</button>
+        <input name="word" class="word" id="word" placeholder="<word_to_check>" autocomplete="off" required autofocus disabled>
+        <button id="checkwordbtn" disabled>Check Word</button>
     </form>
 </section>
 

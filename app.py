@@ -1,11 +1,8 @@
 from boggle import Boggle
 from flask import Flask, request, render_template, redirect, flash, session, jsonify
-from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "6uar1n0"
-debug = DebugToolbarExtension(app)
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 boggle_game = Boggle()
 
@@ -15,22 +12,25 @@ def default_route():
     """default base template route and homepage"""
 
     homepage = True
+    
     return render_template("index.html", homepage=homepage)
 
 
 @app.route("/game")
 def game_route():
-    """route once game is started"""
+    """main game route to setup game board and session variables"""
 
     board = boggle_game.make_board()
-    session['board'] = board
-
-    return render_template("game.html", board=board)
+    session["board"] = board
+    numplays = session.get("numplays", 0)
+    highscore = session.get("highscore", 0)
+    
+    return render_template("game.html", board=board, numplays=numplays, highscore=highscore)
 
 
 @app.route("/wordcheck")
 def word_check():
-    """checking to see if word exists"""
+    """checking to see if word exists and return result"""
 
     word = request.args["word"]
     board = session["board"]
@@ -39,10 +39,14 @@ def word_check():
     return result
 
 
-@app.route("/score")
+@app.route("/score", methods=["POST"])
 def score_update():
-    """handling of scoring for game"""
+    """handling of scoring for game and stats, checks if highscore was hit or not too"""
 
     score = request.json["score"]
+    highscore = session.get("highscore", 0)
+    numplays = session.get("numplays", 0)
+    session["numplays"] = numplays + 1
+    session['highscore'] = max(score, highscore)
 
-    return
+    return jsonify(brokeRecord=score > highscore)
