@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     let score = 0;
-    let time = 20;
+    let time = 15;
     let words = new Set();
 
     document.getElementById("checkwordbtn").addEventListener("click", function (e) {
@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     async function sendWordToServer(word) {
         let resp = await axios.get("/wordcheck", { params: { word: word } });
         console.log("got", resp);
-        if (resp.data === "not-word") {
+        if (resp.data.result === "not-word") {
             showMsg(`The word "${word}" is not found in the application's dictionary.`, "err");
-        } else if (resp.data === "not-on-board") {
+        } else if (resp.data.result === "not-on-board") {
             showMsg(`The word "${word}" was not found on current board.`, "warn");
         } else if (words.has(word)) {
             showMsg(`Already found the word "${word}" and scored.`, "warn");

@@ -33,10 +33,10 @@ def word_check():
     """checking to see if word exists and return result"""
 
     word = request.args["word"]
-    board = session["board"]
-    result = jsonify(boggle_game.check_valid_word(board, word))
+    board = session["board"]   
+    resp = boggle_game.check_valid_word(board, word)
 
-    return result
+    return jsonify({'result': resp})
 
 
 @app.route("/score", methods=["POST"])
